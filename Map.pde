@@ -7,7 +7,7 @@ class Map
   int startX, startY, goalX, goalY;
   String [] waves; //each line lists the delay between spawns, then the individual bad guys to spawn (by type number)
   
-  public Map( int level )      //1 - grass, 2 - path, 3 - start, 4 - end
+  public Map( int level )      //1 - grass, 2 - path, 3 - start, 4 - end, 5 - tower
   {
     switch( level )
     {
@@ -28,6 +28,17 @@ class Map
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 },
                          { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1 } };
         spot = temp1;
+        waves = new String[10];
+        waves[0] = "241111";
+        waves[1] = "111111";
+        waves[2] = "222222";
+        waves[3] = "122222";
+        waves[4] = "233333";
+        waves[5] = "133333";
+        waves[6] = "244444";
+        waves[7] = "255555";
+        waves[8] = "266666";
+        waves[9] = "123456789";
         break;
       case 2:
         int temp2[][] ={ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -82,7 +93,7 @@ class Map
                            { 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1 },
                            { 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1 } };
         spot = temp_d;
-        waves = new String[10];
+        waves = new String[11];
         waves[0] = "211111";
         waves[1] = "21111111111";
         waves[2] = "11111111111";
@@ -93,6 +104,7 @@ class Map
         waves[7] = "24141414141";
         waves[8] = "12424242424";
         waves[9] = "23434343434";
+        waves[10]= "27897897897";
         break;
     }
     for(int i = 0; i < spot.length; i++)
@@ -119,15 +131,44 @@ class Map
       case 2: fill(190,170,130); break;
       case 3: fill(0,0,200); break;
       case 4: fill(200,0,0); break;
+      default: fill(120); break;
     }
     rect(x*size,y*size,size,size);
     
     //NEW
+    //if( showSquares && type == 1 && mouseInSquare(x,y) )
+    //  tint(150,150,0);
     switch(type)
     {
-      case 1: image(grass,x*size,y*size); break;
+      case 1: case 5: image(grass,x*size,y*size); break;
       case 2: image(sand,x*size,y*size);  break;
     }
+    noTint();
+  }
+  
+  public void drawSpotWithCircle()
+  {
+    int x = mouseX/m.size*m.size+m.size/2;
+    int y = mouseY/m.size*m.size+m.size/2;
+    push();
+    noFill();
+    stroke(127,127);
+    strokeWeight(3);
+    circle(x,y,towerToPlace.range*m.size);
+    noStroke();
+    fill(150,150,0,125);
+    rectMode(CENTER);
+    square(x,y,m.size);
+    pop();
+  }
+  
+  public boolean placementIsLegal()
+  {
+    int x = mouseX / m.size;
+    int y = mouseY / m.size;
+    if( x < spot.length && y < spot.length && spot[x][y] == 1 )
+      return true;
+    return false;
   }
   
   public void drawMap()
@@ -140,5 +181,9 @@ class Map
       {
         drawSpot( i, j, spot[i][j] );  // <- flipped i and j here
       }
+    if(showSquares && placementIsLegal() )
+    {
+      drawSpotWithCircle();
+    }
   }
 }

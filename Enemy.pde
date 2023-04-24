@@ -8,21 +8,28 @@ class Enemy
   int speed;
   int type;
   
+  int progress; //how far it has traveled
+  
   public Enemy( int t )
   {
     type = t;
     
-    xPos = m.startX*m.size+m.size/2;
-    yPos = m.startY*m.size+m.size/2;
+    if( type == -1 )
+      xPos = yPos = 1000; //for non-target enemy
+    else
+      xPos = m.startX*m.size+m.size/2;
+      yPos = m.startY*m.size+m.size/2;
     
     maxHealth = health = max(1,type * type / 2);    //1  4  9  16  25  36  49  64  81  100
                                                     //1  2  4  8   12  18  24  32  40  50
-    switch(type)                    //1 2 3 1 2 3 1 2 3 1
+    switch(type)          //1 2 3 1 2 3 1 2 3 1
     {
       case 2: case 5: case 8: speed = 2; break;
       case 3: case 6: case 9: speed = 3; break;
       default: speed = 1; break;
     }
+    
+    progress = 0;
     
     direction = -1;
   }
@@ -48,6 +55,8 @@ class Enemy
       xPos -= speed;
     if( direction == 4 )
       xPos += speed;
+      
+    progress += speed;
     
     return false;
   }
@@ -131,24 +140,23 @@ class Enemy
   public void drawEnemy()
   {
     push();
+    float transAmount = 255*((float)health/maxHealth);
     switch( type )
     {
-      case 1:  fill(030,030,250); break;
-      case 2:  fill(030,250,250); break;
-      case 3:  fill(030,250,030); break;
-      case 4:  fill(100,030,200); break;
-      case 5:  fill(100,200,200); break;
-      case 6:  fill(100,200,030); break;
-      case 7:  fill(200,030,150); break;
-      case 8:  fill(200,150,150); break;
-      case 9:  fill(200,150,030); break;
+      case 1: fill(030,030,250,transAmount); stroke(030,030,250); break;
+      case 2: fill(030,250,250,transAmount); stroke(030,250,250); break;
+      case 3: fill(030,250,030,transAmount); stroke(030,250,030); break;
+      case 4: fill(100,030,200,transAmount); stroke(100,030,200); break;
+      case 5: fill(100,200,200,transAmount); stroke(100,200,200); break;
+      case 6: fill(100,200,030,transAmount); stroke(100,200,030); break;
+      case 7: fill(200,030,150,transAmount); stroke(200,030,150); break;
+      case 8: fill(200,150,150,transAmount); stroke(200,150,150); break;
+      case 9: fill(200,150,030,transAmount); stroke(200,150,030); break;
       
       default: fill(0); break;
     }
-    tint(0,255*(health/maxHealth));
-    
+    strokeWeight(1);
     circle( xPos, yPos, m.size );
-    
     pop();
   }
   
