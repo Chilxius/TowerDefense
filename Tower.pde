@@ -4,8 +4,10 @@ class Tower
   int xPos, yPos;
   int range;
   int cooldown, attackSpeed;
-  int cost;
+  int upCost;
   int damage;
+  int targets = 1;
+  //String description;
   
   int type; //Towers will have five levels, forking at the last level
             // 1      7      13      19      25      31      37      43     (0,150,250)
@@ -14,7 +16,7 @@ class Tower
             // 4     10      16      22      28      34      40      46     (250,200,0)
             //5 6  11  12  17  18  23  24  29  30  35  36  41  42  47  48   (250,100,100)
   
-  Enemy target;
+  Enemy target [] = new Enemy[5];
   
   color col;
   
@@ -33,7 +35,7 @@ class Tower
     if( xIndex >= 0 && yIndex >= 0 )
       m.spot[xIndex][yIndex] = 5;
       
-    target = noTarget;
+    target[0] = target[1] = target[2] = target[3] = target[4] = noTarget;
   }
   
   public void setTraitsByType()
@@ -49,10 +51,38 @@ class Tower
     }
     switch(type)
     {
-      case 1: range = 5;  attackSpeed = 3; cost = 5; damage = 1; break;
-      case 7: range = 10; attackSpeed = 5; cost = 5; damage = 1; break;
-      case 13: range = 5; break;
-      case 19: range = 1; break;
+      //Square Tower
+      case 1: range = 5; attackSpeed = 4; damage = 1; break;
+      case 2: range = 5; attackSpeed = 4; damage = 2; break;
+      case 3: range = 5; attackSpeed = 3; damage = 2; break;
+      case 4: range = 7; attackSpeed = 3; damage = 2; break;
+      case 5: range = 7; attackSpeed = 3; damage = 4; break;
+      case 6: range = 7; attackSpeed = 2; damage = 2; break;
+              
+      //Diamond Tower
+      case 7:  range = 10; attackSpeed = 5; damage = 1; break;
+      case 8:  range = 12; attackSpeed = 5; damage = 1; break;
+      case 9:  range = 12; attackSpeed = 5; damage = 2; break;
+      case 10: range = 14; attackSpeed = 5; damage = 2; break;
+      case 11: range = 14; attackSpeed = 5; damage = 6; break;
+      case 12: range = 14; attackSpeed = 3; damage = 2; break;
+              
+      //Circle Tower
+      case 13: range = 3; attackSpeed = 3; damage = 1; break;
+      case 14: range = 3; attackSpeed = 2; damage = 1; break;
+      case 15: range = 3; attackSpeed = 2; damage = 2; break;
+      case 16: range = 4; attackSpeed = 2; damage = 2; break;
+      case 17: range = 4; attackSpeed = 2; damage = 3; break;
+      case 18: range = 4; attackSpeed = 1; damage = 2; break;
+      
+      //Triangle Tower
+      case 19: range = 4; attackSpeed = 6; damage = 1; targets = 2; break;
+      case 20: range = 4; attackSpeed = 5; damage = 1; targets = 2; break;
+      case 21: range = 5; attackSpeed = 5; damage = 1; targets = 2; break;
+      case 22: range = 5; attackSpeed = 5; damage = 1; targets = 3; break;
+      case 23: range = 5; attackSpeed = 5; damage = 3; targets = 3; break;
+      case 24: range = 5; attackSpeed = 5; damage = 1; targets = 5; break;
+      
       case 25: range = 1; break;
       case 31: range = 1; break;
       case 37: range = 1; break;
@@ -116,12 +146,20 @@ class Tower
       triangle(0,0-m.size/2*0.9, 0-m.size/2*0.9,m.size/2*0.9, m.size/2*0.9,m.size/2*0.9);
       fill(170);
       triangle(0,0-m.size/2*0.75, 0-m.size/2*0.75,m.size/2*0.75, m.size/2*0.75,m.size/2*0.75);
-      //circle(0,0,m.size*0.75);
       fill(col);
       triangle(0,0-m.size/2*0.6, 0-m.size/2*0.6,m.size/2*0.6, m.size/2*0.6,m.size/2*0.6);
-      //circle(0,0,m.size*0.6);
       pop();
     }
+  }
+  
+  public void drawTowerRange()
+  {
+    push();
+    noFill();
+    stroke(127,127);
+    strokeWeight(3);
+    circle(xPos,yPos,range*m.size);
+    pop();
   }
   
   public void attack()
@@ -129,36 +167,64 @@ class Tower
     if( cooldown <= 0 )
     {
       aquireTarget();
-      if( target.type > 0 ) //not the non-target
-      {
-        shoot(target);
-      }
+      for( int i = 0; i < targets; i++)
+        if( target[i].type > 0 ) //not the non-target
+        {
+          shoot(target[i]);
+        }
     }
   }
   
   public void aquireTarget()
   {
-    target = noTarget;
-    for( Enemy e: bads )
-      if( dist( e.xPos, e.yPos, xPos, yPos ) < range*m.size/2 )
-        if( e.progress > target.progress && e.health > 0 )
-          target = e;
+    for(int i=0;i<5;i++)target[i] = noTarget;
+    
+    if(targets==1) //single attack
+    {
+      for( Enemy e: bads )
+        if( dist( e.xPos, e.yPos, xPos, yPos ) < range*m.size/2 )
+          if( e.progress > target[0].progress && e.health > 0 )
+            target[0] = e;
+    }
+    else //multi-shot
+    {
+      int targetCount = 0;
+      for( Enemy e: bads )
+        if( dist( e.xPos, e.yPos, xPos, yPos ) < range*m.size/2 )
+        {
+          target[targetCount]=e;
+          targetCount++;
+          if(targetCount==targets)
+            break;
+        }
+    }
   }
   
   public void shoot( Enemy e )
   {
+    lasers.add( new Laser( e.xPos, e.yPos, xPos, yPos ) );
+    e.takeDamage(damage);
+    cooldown = attackSpeed;
+    /*
     if( type <= 6 ) //square
     {
-      lasers.add( new Laser( target.xPos, target.yPos, xPos, yPos ) );
-      target.takeDamage(damage);
+      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
+      target[0].takeDamage(damage);
       cooldown = attackSpeed;
     }
     else if( type <= 12 ) //diamond
     {
-      lasers.add( new Laser( target.xPos, target.yPos, xPos, yPos ) );
-      target.takeDamage(damage);
+      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
+      target[0].takeDamage(damage);
       cooldown = attackSpeed;
     }
+    else if( type <= 18 ) //circle
+    {
+      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
+      target[0].takeDamage(damage);
+      cooldown = attackSpeed;
+    }
+    */
   }
   
   public void upgrade( int amount )

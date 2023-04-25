@@ -12,7 +12,7 @@ class HUD
 
   public HUD()
   {
-    cash = 5;
+    cash = 10;
     lives = 50;
     for(int i = 0; i < buttons.length; i++)
       buttons[i] = new Button( width-50, 50+i*100, buttonSize, 1 );
@@ -34,8 +34,17 @@ class HUD
   {
     drawPlayerStats();
     drawTowerButtons();
-    if(clickMode==2)
-      drawUpgradeButton();
+    if(clickMode>0)
+    {
+      if( clickMode == 1 )
+        drawInitialButton();
+      else if( clickMode == 2 && towers.get(towerToUpgrade).canUpgrade() )
+        drawUpgradeButton( true );
+      else
+        drawUpgradeButton( false );
+    }
+    if(clickMode == 2)
+      drawTowerStats(towers.get(towerToUpgrade));
   }
   
   public void drawPlayerStats()
@@ -44,11 +53,21 @@ class HUD
     fill(0);
     textSize(30);
     text("Lives: " + lives,10,height-60);
-    text("Seeds: " + cash,10,height-15);
+    text("Cash: " + cash,10,height-15);
     textSize(20);
     if(nextRoundTimer>0)
-      text("Next Round: " + nextRoundTimer,width-160,height-10);
+      text("Next: " + nextRoundTimer,width-90,height-10);
     text("ClickMode: "+clickMode,width/2,height-10);
+  }
+  
+  public void drawTowerStats( Tower t )
+  {
+    textAlign(LEFT);
+    fill(0);
+    textSize(20);
+    text( "Power: " + t.damage, 510, 685 );
+    text( "Range: " + t.range, 510, 710 );
+    text( "Cooldown: " + t.attackSpeed, 510, 735 );
   }
   
   public void drawTowerButtons()
@@ -61,7 +80,7 @@ class HUD
     for(int i = 0; i < buttons.length; i++)
     {
       fill(0);
-      text("Cost: " + fakeTowers[i].cost, width-50, 100+i*100);
+      text("Cost: " + buildCost[i*6+1], width-50, 100+i*100);
       fill(0,0,255,10);
       
       if(towerSelected == i*6+1) //draw selection circle
@@ -74,16 +93,67 @@ class HUD
     pop();
   }
   
-  public void drawUpgradeButton()
+  public void drawInitialButton()
   {
     push();
     stroke(200,200,0);
     strokeWeight(4);
-    noFill();
-    rect(220,665,330,75);
-    if( towers.get(towerToUpgrade).type % 6 == 4 )
-      line(375,665,375,740);
+    fill( towerColor(1) );
+    rect(170,665,330,75);
+    textSize(20); textAlign(CENTER); fill(0);
+    text( towerDescription[towerToPlace.type], 330, 695 );
     pop();
+  }
+  
+  public void drawUpgradeButton( boolean canUp ) //cost  487,730  321,730
+  {
+    push();
+    if( canUp )
+    {
+      stroke(200,200,0);
+      strokeWeight(4);
+      fill( towerColor( towers.get(towerToUpgrade).type+1 ) );
+      rect(170,665,330,75);
+      if( towers.get(towerToUpgrade).type % 6 == 4 )
+      {
+        fill( towerColor( towers.get(towerToUpgrade).type+2 ) );
+        rect(335,665,165,75);
+        textSize(20); textAlign(CENTER); fill(0);
+        //Description
+        text( towerDescription[towers.get(towerToUpgrade).type+1], 255, 695 );
+        text( towerDescription[towers.get(towerToUpgrade).type+2], 415, 695 );
+        //Cost
+        text( buildCost[towers.get(towerToUpgrade).type+1], 320, 730 );
+        text( buildCost[towers.get(towerToUpgrade).type+2], 485, 730 );
+      }
+      else
+      {
+        textSize(20); textAlign(CENTER); fill(0);
+        text( towerDescription[towers.get(towerToUpgrade).type+1], 330, 710 );
+        text( buildCost[towers.get(towerToUpgrade).type+1], 485, 730 );
+      }
+    }
+    else
+    {
+      stroke(200,200,0);
+      strokeWeight(4);
+      fill(#904590);
+      rect(170,665,330,75);
+    }
+    pop();
+  }
+  
+  public color towerColor( int num )
+  {
+    switch(num%6)
+    {
+      case 1:  return color(0,150,250);
+      case 2:  return color(150,250,0);
+      case 3:  return color(250,250,150);
+      case 4:  return color(250,200,0);
+      case 5:  return color(250,100,100);
+      default: return color(250,250,250);
+    }
   }
   
   public int clickedUpgradeBox() //returns 1 or 2 for which side was clicked, -1 if not clicked

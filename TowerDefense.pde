@@ -26,12 +26,15 @@ int towerToUpgrade = -1; //tower being upgraded
 
 //Tower/shots data
 int towerCounter = 1000;
+String [] towerDescription = new String[48]; //couldn't think of a better way to do this - need to access future versions of towers
+int [] buildCost = new int[48]; //same as above
 
 void setup()
 {
   size(750,750);
   m = new Map(1);
   player = new HUD();
+  setupTowerData();
   
   grass = loadImage("grass.png"); grass.resize(m.size,0);
   sand  = loadImage("sand.png");  sand.resize(m.size,0);
@@ -63,9 +66,27 @@ void draw()
     t.drawTower();
     t.attack();
   }
+  drawTowerCircle();
+  
   
   for( Laser l: lasers )
     l.laser();
+}
+
+void drawTowerCircle()
+{
+  for( int i = 0; i < towers.size(); i++)
+    if( clickMode == 2 && towerToUpgrade == i )
+      towers.get(i).drawTowerRange();
+    else if( mouseOverTower(towers.get(i)) )
+      towers.get(i).drawTowerRange();
+}
+
+boolean mouseOverTower( Tower t )
+{
+  if( mouseX > t.xPos-m.size/2 && mouseX < t.xPos+m.size/2 && mouseY > t.yPos-m.size/2 && mouseY < t.yPos+m.size/2 )
+    return true;
+  return false;
 }
 
 void runRoundCounter() //counts to next round, spawns enemies for the round, starts next round
@@ -73,7 +94,7 @@ void runRoundCounter() //counts to next round, spawns enemies for the round, sta
   if(nextSecond < millis())
   {
     if(nextSpawn>0)  //give spawn timer ability to spawn faster
-      nextSecond += 500;
+      nextSecond += 250;
     else
       nextSecond += 1000;
     
@@ -159,6 +180,48 @@ int buttonClicked()
   return -1;
 }
 
+void setupTowerData()
+{
+  towerDescription[0] = "NO DESCRIPTION"; buildCost[0] = 0;
+  
+  //Square Tower
+  towerDescription[1] = "Low Damage, Medium Speed,\nMedium Range"; buildCost[1] = 10;
+  towerDescription[2] = "Increase Damage";                         buildCost[2] = 10;
+  towerDescription[3] = "Increase Speed";                          buildCost[3] = 12;
+  towerDescription[4] = "Increase Range";                          buildCost[4] = 12;
+  towerDescription[5] = "Double\nDamage";                          buildCost[5] = 14;
+  towerDescription[6] = "Double\nSpeed";                           buildCost[6] = 14;
+  
+  //Square Tower
+  towerDescription[7] = "Medium Damage, Slow Speed,\nHigh Range"; buildCost[7]  = 10;
+  towerDescription[8] = "Increase Range";                         buildCost[8]  = 12;
+  towerDescription[9] = "Increase Damage";                        buildCost[9]  = 14;
+  towerDescription[10] = "Increase Range";                        buildCost[10] = 12;
+  towerDescription[11] = "Tripple\nDamage";                       buildCost[11] = 20;
+  towerDescription[12] = "Increase\nSpeed";                       buildCost[12] = 14;
+  
+  //Circle Tower
+  towerDescription[13] = "Low Damage, Fast Speed,\nSmall Range"; buildCost[13] = 6;
+  towerDescription[14] = "Increase Speed";                       buildCost[14] = 8;
+  towerDescription[15] = "Increase Damage";                      buildCost[15] = 10;
+  towerDescription[16] = "Increase Range";                       buildCost[16] = 12;
+  towerDescription[17] = "Increase\nDamage";                     buildCost[17] = 20;
+  towerDescription[18] = "Increase\nSpeed";                      buildCost[18] = 20;
+  
+  //Triangle Tower
+  towerDescription[19] = "Low Damage, Slow Speed,\nMulti-Shot"; buildCost[19] = 14;
+  towerDescription[20] = "Increase Speed";                      buildCost[20] = 8;
+  towerDescription[21] = "Increase Range";                      buildCost[21] = 8;
+  towerDescription[22] = "Three Targets";                       buildCost[22] = 16;
+  towerDescription[23] = "Tripple\nDamage";                     buildCost[23] = 24;
+  towerDescription[24] = "Five\nTargets";                       buildCost[24] = 24;
+  
+  //Others
+  towerDescription[25] = "NO DATA"; buildCost[25] = 0;
+  towerDescription[31] = "NO DATA"; buildCost[31] = 0;
+  towerDescription[37] = "NO DATA"; buildCost[37] = 0;
+}
+
 void mousePressed()
 {
   println( mouseX+" "+mouseY );
@@ -167,7 +230,8 @@ void mousePressed()
   {
     //Clicked new tower button
     towerSelected = buttonClicked();
-    if( towerSelected > 0 && player.cash >= fakeTowers[towerSelected/6].cost )
+    println(towerSelected);
+    if( towerSelected > 0 && player.cash >= buildCost[towerSelected] )
     {
       clickMode = 1;
       showSquares = true;
@@ -178,7 +242,7 @@ void mousePressed()
     
     //Clicked existing tower
     for( int i = 0; i < towers.size(); i++ )
-      if( towers.get(i).xIndex == mouseX/m.size && towers.get(i).yIndex == mouseY/m.size && towers.get(i).canUpgrade() )
+      if( towers.get(i).xIndex == mouseX/m.size && towers.get(i).yIndex == mouseY/m.size )//&& towers.get(i).canUpgrade() )
       {
         towerToUpgrade = i;
         clickMode = 2;
@@ -190,7 +254,7 @@ void mousePressed()
     if( m.placementIsLegal() ) //place tower
     {
       towers.add( new Tower( mouseX/m.size, mouseY/m.size, towerToPlace.type ) );
-      player.cash -= towerToPlace.cost;
+      player.cash -= buildCost[towerToPlace.type];
       towerToPlace = new Tower(-1,-1,0);
       clickMode = 0;
       showSquares = false;
@@ -203,22 +267,22 @@ void mousePressed()
       towerToPlace = new Tower(-1,-1,0);
       towerSelected = -1;
     }
-    else if( buttonClicked() != towerSelected && buttonClicked() > 0 && player.cash >= fakeTowers[towerSelected/6].cost ) //change tower
+    else if( buttonClicked() != towerSelected && buttonClicked() > 0 && player.cash >= buildCost[buttonClicked()] ) //change tower
     {
       towerSelected = buttonClicked();
       towerToPlace = new Tower(-1,-1, towerSelected );
     }
   }
-  else if( clickMode == 2 )
+  else if( clickMode == 2 ) //clicked on a built tower
   {
-    if( player.clickedUpgradeBox() > 0 )
+    if( player.clickedUpgradeBox() > 0 && towers.get(towerToUpgrade).canUpgrade() )
     {
       if( towers.get(towerToUpgrade).type % 6 == 4 && player.clickedUpgradeBox() == 2 )
         towers.get(towerToUpgrade).upgrade(2);
       else
         towers.get(towerToUpgrade).upgrade(1);
-      clickMode = 0;
-      towerToUpgrade = -1;
+      //clickMode = 0;
+      //towerToUpgrade = -1;
     }
     else
     {
