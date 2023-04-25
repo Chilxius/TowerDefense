@@ -76,12 +76,12 @@ class Tower
       case 18: range = 4; attackSpeed = 1; damage = 2; break;
       
       //Triangle Tower
-      case 19: range = 4; attackSpeed = 6; damage = 1; targets = 2; break;
-      case 20: range = 4; attackSpeed = 5; damage = 1; targets = 2; break;
-      case 21: range = 5; attackSpeed = 5; damage = 1; targets = 2; break;
-      case 22: range = 5; attackSpeed = 5; damage = 1; targets = 3; break;
-      case 23: range = 5; attackSpeed = 5; damage = 3; targets = 3; break;
-      case 24: range = 5; attackSpeed = 5; damage = 1; targets = 5; break;
+      case 19: range = 5; attackSpeed = 6; damage = 1; targets = 2; break;
+      case 20: range = 5; attackSpeed = 5; damage = 1; targets = 2; break;
+      case 21: range = 7; attackSpeed = 5; damage = 1; targets = 2; break;
+      case 22: range = 7; attackSpeed = 5; damage = 1; targets = 3; break;
+      case 23: range = 7; attackSpeed = 5; damage = 3; targets = 3; break;
+      case 24: range = 7; attackSpeed = 5; damage = 1; targets = 5; break;
       
       case 25: range = 1; break;
       case 31: range = 1; break;

@@ -32,7 +32,7 @@ int [] buildCost = new int[48]; //same as above
 void setup()
 {
   size(750,750);
-  m = new Map(1);
+  m = new Map(2);
   player = new HUD();
   setupTowerData();
   
@@ -277,10 +277,16 @@ void mousePressed()
   {
     if( player.clickedUpgradeBox() > 0 && towers.get(towerToUpgrade).canUpgrade() )
     {
-      if( towers.get(towerToUpgrade).type % 6 == 4 && player.clickedUpgradeBox() == 2 )
+      if( towers.get(towerToUpgrade).type % 6 == 4 && player.clickedUpgradeBox() == 2 && player.cash >= buildCost[towers.get(towerToUpgrade).type+2] )
+      {
+        player.cash -= buildCost[towers.get(towerToUpgrade).type+2];
         towers.get(towerToUpgrade).upgrade(2);
-      else
+      }
+      else if( player.cash >= buildCost[towers.get(towerToUpgrade).type+1] )
+      {
+        player.cash -= buildCost[towers.get(towerToUpgrade).type+1];
         towers.get(towerToUpgrade).upgrade(1);
+      }
       //clickMode = 0;
       //towerToUpgrade = -1;
     }
@@ -289,5 +295,14 @@ void mousePressed()
       clickMode = 0;
       towerToUpgrade = -1;
     }
+    
+    //Clicked other tower
+    for( int i = 0; i < towers.size(); i++ )
+      if( towers.get(i).xIndex == mouseX/m.size && towers.get(i).yIndex == mouseY/m.size )//&& towers.get(i).canUpgrade() )
+      {
+        towerToUpgrade = i;
+        clickMode = 2;
+        break;
+      }
   }
 }
