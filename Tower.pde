@@ -52,12 +52,12 @@ class Tower
     switch(type)
     {
       //Square Tower
-      case 1: range = 5; attackSpeed = 4; damage = 1; break;
-      case 2: range = 5; attackSpeed = 4; damage = 2; break;
-      case 3: range = 5; attackSpeed = 3; damage = 2; break;
-      case 4: range = 7; attackSpeed = 3; damage = 2; break;
-      case 5: range = 7; attackSpeed = 3; damage = 4; break;
-      case 6: range = 7; attackSpeed = 2; damage = 2; break;
+      case 1: range = 5; attackSpeed = 4; damage = 2; break;
+      case 2: range = 5; attackSpeed = 4; damage = 3; break;
+      case 3: range = 5; attackSpeed = 3; damage = 3; break;
+      case 4: range = 7; attackSpeed = 3; damage = 3; break;
+      case 5: range = 7; attackSpeed = 3; damage = 5; break;
+      case 6: range = 7; attackSpeed = 2; damage = 3; break;
               
       //Diamond Tower
       case 7:  range = 10; attackSpeed = 5; damage = 1; break;
@@ -77,11 +77,11 @@ class Tower
       
       //Triangle Tower
       case 19: range = 5; attackSpeed = 6; damage = 1; targets = 2; break;
-      case 20: range = 5; attackSpeed = 5; damage = 1; targets = 2; break;
-      case 21: range = 7; attackSpeed = 5; damage = 1; targets = 2; break;
-      case 22: range = 7; attackSpeed = 5; damage = 1; targets = 3; break;
-      case 23: range = 7; attackSpeed = 5; damage = 3; targets = 3; break;
-      case 24: range = 7; attackSpeed = 5; damage = 1; targets = 5; break;
+      case 20: range = 5; attackSpeed = 5; damage = 1; targets = 3; break;
+      case 21: range = 7; attackSpeed = 5; damage = 1; targets = 4; break;
+      case 22: range = 7; attackSpeed = 4; damage = 1; targets = 5; break;
+      case 23: range = 7; attackSpeed = 4; damage = 3; targets = 5; break;
+      case 24: range = 7; attackSpeed = 4; damage = 1; targets = 10; break;
       
       case 25: range = 1; break;
       case 31: range = 1; break;

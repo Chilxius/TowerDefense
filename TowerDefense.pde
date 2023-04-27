@@ -32,7 +32,7 @@ int [] buildCost = new int[48]; //same as above
 void setup()
 {
   size(750,750);
-  m = new Map(2);
+  m = new Map(1);
   player = new HUD();
   setupTowerData();
   
@@ -115,7 +115,8 @@ void runRoundCounter() //counts to next round, spawns enemies for the round, sta
       if(nextSpawn==0)
       {
         nextSpawn = spawnDelay;
-        bads.add(new Enemy(m.waves[wave].charAt(spawnIndex)-'0'));
+        if( m.waves[wave].charAt(spawnIndex)-'0' != 0 )
+          bads.add(new Enemy(m.waves[wave].charAt(spawnIndex)-'0'));
         spawnIndex++;
         if(spawnIndex>=m.waves[wave].length())
           nextSpawn=-1;
@@ -124,7 +125,7 @@ void runRoundCounter() //counts to next round, spawns enemies for the round, sta
   }
   if( nextSpawn == -1 && bads.size() == 0 ) //time for next round
   {
-    nextRoundTimer = 15;
+    nextRoundTimer = 5;
     nextSpawn = 0;
     spawnIndex = 0;
     spawnDelay = 0;
@@ -185,14 +186,14 @@ void setupTowerData()
   towerDescription[0] = "NO DESCRIPTION"; buildCost[0] = 0;
   
   //Square Tower
-  towerDescription[1] = "Low Damage, Medium Speed,\nMedium Range"; buildCost[1] = 10;
+  towerDescription[1] = "Medium Damage, Medium Speed,\nMedium Range"; buildCost[1] = 10;
   towerDescription[2] = "Increase Damage";                         buildCost[2] = 10;
   towerDescription[3] = "Increase Speed";                          buildCost[3] = 12;
   towerDescription[4] = "Increase Range";                          buildCost[4] = 12;
-  towerDescription[5] = "Double\nDamage";                          buildCost[5] = 14;
+  towerDescription[5] = "Increase Damage";                         buildCost[5] = 14;
   towerDescription[6] = "Double\nSpeed";                           buildCost[6] = 14;
   
-  //Square Tower
+  //Diamond Tower
   towerDescription[7] = "Medium Damage, Slow Speed,\nHigh Range"; buildCost[7]  = 10;
   towerDescription[8] = "Increase Range";                         buildCost[8]  = 12;
   towerDescription[9] = "Increase Damage";                        buildCost[9]  = 14;
@@ -212,9 +213,9 @@ void setupTowerData()
   towerDescription[19] = "Low Damage, Slow Speed,\nMulti-Shot"; buildCost[19] = 14;
   towerDescription[20] = "Increase Speed";                      buildCost[20] = 8;
   towerDescription[21] = "Increase Range";                      buildCost[21] = 8;
-  towerDescription[22] = "Three Targets";                       buildCost[22] = 16;
+  towerDescription[22] = "Increase Speed";                      buildCost[22] = 16;
   towerDescription[23] = "Tripple\nDamage";                     buildCost[23] = 24;
-  towerDescription[24] = "Five\nTargets";                       buildCost[24] = 24;
+  towerDescription[24] = "Max 10\nTargets";                     buildCost[24] = 24;
   
   //Others
   towerDescription[25] = "NO DATA"; buildCost[25] = 0;

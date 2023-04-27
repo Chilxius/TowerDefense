@@ -140,7 +140,7 @@ class Enemy
   public void drawEnemy()
   {
     push();
-    float transAmount = 255*((float)health/maxHealth);
+    float transAmount = 255*((float)health/maxHealth);      // : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z
     switch( type )
     {
       case 1: fill(030,030,250,transAmount); stroke(030,030,250); break;
@@ -152,6 +152,7 @@ class Enemy
       case 7: fill(200,030,150,transAmount); stroke(200,030,150); break;
       case 8: fill(200,150,150,transAmount); stroke(200,150,150); break;
       case 9: fill(200,150,030,transAmount); stroke(200,150,030); break;
+      case 10:fill(255,transAmount); stroke(255); break;
       
       default: fill(0); break;
     }
