@@ -150,6 +150,45 @@ class Tower
       triangle(0,0-m.size/2*0.6, 0-m.size/2*0.6,m.size/2*0.6, m.size/2*0.6,m.size/2*0.6);
       pop();
     }
+    else if( type <= 30 )
+    {
+      push();
+      translate( xPos, yPos );
+      noStroke();
+      //rectMode(CENTER);
+      fill(150);
+      stroke(0);
+      beginShape();
+      vertex(xPos,yPos); //top-left
+      vertex(xPos+m.size/3,yPos-m.size); //top-right
+      vertex(xPos+m.size/2,yPos); //right
+      vertex(xPos+m.size/3,yPos+m.size); //bottom-left
+      vertex(xPos-m.size/3,yPos+m.size); //bottom-right
+      vertex(xPos-m.size/2,yPos); //left
+      endShape();
+      //triangle(0,0-m.size/2*0.9, 0-m.size/2*0.9,m.size/2*0.9, m.size/2*0.9,m.size/2*0.9);
+      fill(170);
+      beginShape();
+      vertex(xPos-m.size/4,yPos-m.size); //top-left
+      vertex(xPos+m.size/4,yPos-m.size); //top-right
+      vertex(xPos+m.size/3,yPos); //right
+      vertex(xPos+m.size/4,yPos+m.size); //bottom-left
+      vertex(xPos-m.size/4,yPos+m.size); //bottom-right
+      vertex(xPos-m.size/3,yPos); //left
+      endShape();
+      //triangle(0,0-m.size/2*0.75, 0-m.size/2*0.75,m.size/2*0.75, m.size/2*0.75,m.size/2*0.75);
+      fill(col);
+      beginShape();
+      vertex(xPos-m.size/5,yPos-m.size); //top-left
+      vertex(xPos+m.size/5,yPos-m.size); //top-right
+      vertex(xPos+m.size/4,yPos); //right
+      vertex(xPos+m.size/5,yPos+m.size); //bottom-left
+      vertex(xPos-m.size/5,yPos+m.size); //bottom-right
+      vertex(xPos-m.size/4,yPos); //left
+      endShape();
+     // triangle(0,0-m.size/2*0.6, 0-m.size/2*0.6,m.size/2*0.6, m.size/2*0.6,m.size/2*0.6);
+      pop();
+    }
   }
   
   public void drawTowerRange()

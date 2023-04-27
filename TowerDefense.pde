@@ -71,6 +71,8 @@ void draw()
   
   for( Laser l: lasers )
     l.laser();
+    
+  //fakeTowers[4].drawTower();
 }
 
 void drawTowerCircle()
@@ -193,7 +195,7 @@ void setupTowerData()
   towerDescription[2] = "Increase Damage";                         buildCost[2] = 10;
   towerDescription[3] = "Increase Speed";                          buildCost[3] = 12;
   towerDescription[4] = "Increase Range";                          buildCost[4] = 12;
-  towerDescription[5] = "Increase Damage";                         buildCost[5] = 14;
+  towerDescription[5] = "Increase\nDamage";                         buildCost[5] = 14;
   towerDescription[6] = "Double\nSpeed";                           buildCost[6] = 14;
   
   //Diamond Tower
