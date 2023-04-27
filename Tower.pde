@@ -60,12 +60,12 @@ class Tower
       case 6: range = 7; attackSpeed = 2; damage = 3; break;
               
       //Diamond Tower
-      case 7:  range = 10; attackSpeed = 5; damage = 1; break;
-      case 8:  range = 12; attackSpeed = 5; damage = 1; break;
-      case 9:  range = 12; attackSpeed = 5; damage = 2; break;
-      case 10: range = 14; attackSpeed = 5; damage = 2; break;
+      case 7:  range = 10; attackSpeed = 5; damage = 2; break;
+      case 8:  range = 12; attackSpeed = 5; damage = 2; break;
+      case 9:  range = 12; attackSpeed = 5; damage = 3; break;
+      case 10: range = 14; attackSpeed = 5; damage = 3; break;
       case 11: range = 14; attackSpeed = 5; damage = 6; break;
-      case 12: range = 14; attackSpeed = 3; damage = 2; break;
+      case 12: range = 14; attackSpeed = 3; damage = 3; break;
               
       //Circle Tower
       case 13: range = 3; attackSpeed = 3; damage = 1; break;
@@ -202,7 +202,7 @@ class Tower
   
   public void shoot( Enemy e )
   {
-    lasers.add( new Laser( e.xPos, e.yPos, xPos, yPos ) );
+    lasers.add( new Laser( e.xPos, e.yPos, xPos, yPos, col ) );
     e.takeDamage(damage);
     cooldown = attackSpeed;
     /*

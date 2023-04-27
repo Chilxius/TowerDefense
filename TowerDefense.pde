@@ -152,6 +152,9 @@ void handleBadGuys()
     if(bads.get(i).move())
     {
       player.loseLives((bads.get(i).type-1)/3+1); // 1 1 1 2 2 2 3 3 3 4
+      //bads.get(i).startOver();
+      bads.add( new Enemy(bads.get(i).type) );
+      bads.get(bads.size()-1).health = bads.get(i).health;
       bads.remove(i);
       i--;
     }
@@ -198,7 +201,7 @@ void setupTowerData()
   towerDescription[8] = "Increase Range";                         buildCost[8]  = 12;
   towerDescription[9] = "Increase Damage";                        buildCost[9]  = 14;
   towerDescription[10] = "Increase Range";                        buildCost[10] = 12;
-  towerDescription[11] = "Tripple\nDamage";                       buildCost[11] = 20;
+  towerDescription[11] = "Double\nDamage";                       buildCost[11] = 20;
   towerDescription[12] = "Increase\nSpeed";                       buildCost[12] = 14;
   
   //Circle Tower

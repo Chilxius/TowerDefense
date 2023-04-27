@@ -61,6 +61,12 @@ class Enemy
     return false;
   }
   
+  public void startOver()
+  {
+    xPos = m.startX*m.size+m.size/2;
+    yPos = m.startY*m.size+m.size/2;
+  }
+  
   public boolean reachedDestination()
   {
     if( direction == 1 && yPos <= destY )

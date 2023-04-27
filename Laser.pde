@@ -2,8 +2,9 @@ class Laser
 {
   int xPos1, yPos1, xPos2, yPos2;
   int timeLeft;
+  color col;
   
-  public Laser( int x1, int y1, int x2, int y2 )
+  public Laser( int x1, int y1, int x2, int y2, color c )
   {
     xPos1 = x1;
     yPos1 = y1;
@@ -11,12 +12,13 @@ class Laser
     yPos2 = y2;
     
     timeLeft = 10;
+    col = c;
   }
   
   public boolean laser() //returns true when finished
   {
     push();
-    stroke(250,200,0,timeLeft*25);
+    stroke(col,timeLeft*25);
     strokeWeight(max(1,timeLeft));
     line(xPos1,yPos1,xPos2,yPos2);
     pop();
