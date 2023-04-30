@@ -16,7 +16,7 @@ class Tower
             // 4     10      16      22      28      34      40      46     (250,200,0)
             //5 6  11  12  17  18  23  24  29  30  35  36  41  42  47  48   (250,100,100)
   
-  Enemy target [] = new Enemy[5];
+  Enemy target [] = new Enemy[10];
   
   color col;
   
@@ -65,7 +65,7 @@ class Tower
       case 9:  range = 12; attackSpeed = 5; damage = 3; break;
       case 10: range = 14; attackSpeed = 5; damage = 3; break;
       case 11: range = 14; attackSpeed = 5; damage = 6; break;
-      case 12: range = 14; attackSpeed = 3; damage = 3; break;
+      case 12: range = 14; attackSpeed = 3; damage = 3; targets = 2; break;
               
       //Circle Tower
       case 13: range = 3; attackSpeed = 3; damage = 1; break;
@@ -80,11 +80,26 @@ class Tower
       case 20: range = 5; attackSpeed = 5; damage = 1; targets = 3; break;
       case 21: range = 7; attackSpeed = 5; damage = 1; targets = 4; break;
       case 22: range = 7; attackSpeed = 4; damage = 1; targets = 5; break;
-      case 23: range = 7; attackSpeed = 4; damage = 3; targets = 5; break;
-      case 24: range = 7; attackSpeed = 4; damage = 1; targets = 10; break;
+      case 23: range = 7; attackSpeed = 4; damage = 3; targets = 6; break;
+      case 24: range = 9; attackSpeed = 4; damage = 1; targets = 6; break;
       
-      case 25: range = 1; break;
-      case 31: range = 1; break;
+      //Hexagon Tower
+      case 25: range = 6; attackSpeed = 8; damage = 2; break;
+      case 26: range = 8; attackSpeed = 8; damage = 2; break;
+      case 27: range = 8; attackSpeed = 8; damage = 3; break;
+      case 28: range = 8; attackSpeed = 7; damage = 3; break;
+      case 29: range = 8; attackSpeed = 7; damage = 6; break;
+      case 30: range = 8; attackSpeed = 7; damage = 3; break;
+      
+      //Octagon Tower
+      case 31: range = 4; targets = 3; break;
+      case 32: range = 5; targets = 3; break;
+      case 33: range = 5; targets = 6; break;
+      case 34: range = 6; targets = 6; break;
+      case 35: range = 6; targets = 6; break;
+      case 36: range = 6; targets = 10; break;
+      
+      //Others
       case 37: range = 1; break;
     }
   }
@@ -157,36 +172,72 @@ class Tower
       noStroke();
       //rectMode(CENTER);
       fill(150);
-      stroke(0);
       beginShape();
-      vertex(xPos,yPos); //top-left
-      vertex(xPos+m.size/3,yPos-m.size); //top-right
-      vertex(xPos+m.size/2,yPos); //right
-      vertex(xPos+m.size/3,yPos+m.size); //bottom-left
-      vertex(xPos-m.size/3,yPos+m.size); //bottom-right
-      vertex(xPos-m.size/2,yPos); //left
+      vertex(0-m.size/3*0.9,0-m.size/2*0.9); //top-left
+      vertex(0+m.size/3*0.9,0-m.size/2*0.9); //top-right
+      vertex(0+m.size/1.75*0.9,0); //right
+      vertex(0+m.size/3*0.9,0+m.size/2*0.9); //bottom-left
+      vertex(0-m.size/3*0.9,0+m.size/2*0.9); //bottom-right
+      vertex(0-m.size/1.75*0.9,0); //left
       endShape();
-      //triangle(0,0-m.size/2*0.9, 0-m.size/2*0.9,m.size/2*0.9, m.size/2*0.9,m.size/2*0.9);
-      fill(170);
+      fill(170);  
       beginShape();
-      vertex(xPos-m.size/4,yPos-m.size); //top-left
-      vertex(xPos+m.size/4,yPos-m.size); //top-right
-      vertex(xPos+m.size/3,yPos); //right
-      vertex(xPos+m.size/4,yPos+m.size); //bottom-left
-      vertex(xPos-m.size/4,yPos+m.size); //bottom-right
-      vertex(xPos-m.size/3,yPos); //left
+      vertex(0-m.size/3*0.75,0-m.size/2*0.75); //top-left
+      vertex(0+m.size/3*0.75,0-m.size/2*0.75); //top-right
+      vertex(0+m.size/1.75*0.75,0); //right
+      vertex(0+m.size/3*0.75,0+m.size/2*0.75); //bottom-left
+      vertex(0-m.size/3*0.75,0+m.size/2*0.75); //bottom-right
+      vertex(0-m.size/1.75*0.75,0); //left
       endShape();
-      //triangle(0,0-m.size/2*0.75, 0-m.size/2*0.75,m.size/2*0.75, m.size/2*0.75,m.size/2*0.75);
       fill(col);
       beginShape();
-      vertex(xPos-m.size/5,yPos-m.size); //top-left
-      vertex(xPos+m.size/5,yPos-m.size); //top-right
-      vertex(xPos+m.size/4,yPos); //right
-      vertex(xPos+m.size/5,yPos+m.size); //bottom-left
-      vertex(xPos-m.size/5,yPos+m.size); //bottom-right
-      vertex(xPos-m.size/4,yPos); //left
+      vertex(0-m.size/3*0.6,0-m.size/2*0.6); //top-left
+      vertex(0+m.size/3*0.6,0-m.size/2*0.6); //top-right
+      vertex(0+m.size/1.75*0.6,0); //right
+      vertex(0+m.size/3*0.6,0+m.size/2*0.6); //bottom-left
+      vertex(0-m.size/3*0.6,0+m.size/2*0.6); //bottom-right
+      vertex(0-m.size/1.75*0.6,0); //left
       endShape();
-     // triangle(0,0-m.size/2*0.6, 0-m.size/2*0.6,m.size/2*0.6, m.size/2*0.6,m.size/2*0.6);
+      pop();
+    }
+    else if( type <= 36 )
+    {
+      push();
+      translate( xPos, yPos );
+      noStroke();
+      fill(150);
+      beginShape();
+      vertex(0-m.size/3*0.9,0-m.size/2*0.9); //top-top-left
+      vertex(0+m.size/3*0.9,0-m.size/2*0.9);
+      vertex(0+m.size/2*0.9,0-m.size/3*0.9);
+      vertex(0+m.size/2*0.9,0+m.size/3*0.9);
+      vertex(0+m.size/3*0.9,0+m.size/2*0.9);
+      vertex(0-m.size/3*0.9,0+m.size/2*0.9);
+      vertex(0-m.size/2*0.9,0+m.size/3*0.9);
+      vertex(0-m.size/2*0.9,0-m.size/3*0.9);
+      endShape();
+      fill(170);  
+      beginShape();
+      vertex(0-m.size/3*0.75,0-m.size/2*0.75); //top-top-left
+      vertex(0+m.size/3*0.75,0-m.size/2*0.75);
+      vertex(0+m.size/2*0.75,0-m.size/3*0.75);
+      vertex(0+m.size/2*0.75,0+m.size/3*0.75);
+      vertex(0+m.size/3*0.75,0+m.size/2*0.75);
+      vertex(0-m.size/3*0.75,0+m.size/2*0.75);
+      vertex(0-m.size/2*0.75,0+m.size/3*0.75);
+      vertex(0-m.size/2*0.75,0-m.size/3*0.75);
+      endShape();
+      fill(col);
+      beginShape();
+      vertex(0-m.size/3*0.6,0-m.size/2*0.6); //top-top-left
+      vertex(0+m.size/3*0.6,0-m.size/2*0.6);
+      vertex(0+m.size/2*0.6,0-m.size/3*0.6);
+      vertex(0+m.size/2*0.6,0+m.size/3*0.6);
+      vertex(0+m.size/3*0.6,0+m.size/2*0.6);
+      vertex(0-m.size/3*0.6,0+m.size/2*0.6);
+      vertex(0-m.size/2*0.6,0+m.size/3*0.6);
+      vertex(0-m.size/2*0.6,0-m.size/3*0.6);
+      endShape();
       pop();
     }
   }
@@ -216,7 +267,7 @@ class Tower
   
   public void aquireTarget()
   {
-    for(int i=0;i<5;i++)target[i] = noTarget;
+    for(int i=0;i<targets;i++)target[i] = noTarget;
     
     if(targets==1) //single attack
     {
@@ -241,29 +292,30 @@ class Tower
   
   public void shoot( Enemy e )
   {
-    lasers.add( new Laser( e.xPos, e.yPos, xPos, yPos, col ) );
-    e.takeDamage(damage);
-    cooldown = attackSpeed;
-    /*
-    if( type <= 6 ) //square
+    if( type < 25 )  //square, diamond, circle, triangle
     {
-      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
-      target[0].takeDamage(damage);
+      lasers.add( new Laser( e.xPos, e.yPos, xPos, yPos, col ) );
+      e.takeDamage(damage);
       cooldown = attackSpeed;
     }
-    else if( type <= 12 ) //diamond
+    else if( type < 31 )  //hexagon
     {
-      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
-      target[0].takeDamage(damage);
+      if( type == 30 ) //white hex
+        bombs.add( new Bomb( e.destX, e.destY, xPos, yPos, col, damage, m.size*4) );
+      else
+        bombs.add( new Bomb( e.destX, e.destY, xPos, yPos, col, damage, m.size*2) );
       cooldown = attackSpeed;
     }
-    else if( type <= 18 ) //circle
+    else if( type < 37 ) //octogon
     {
-      lasers.add( new Laser( target[0].xPos, target[0].yPos, xPos, yPos ) );
-      target[0].takeDamage(damage);
-      cooldown = attackSpeed;
+      stroke( col,100 );
+      strokeWeight(20);
+      line( xPos, yPos, e.xPos, e.yPos );
+      if( type == 35 ) //red octo
+        e.slow = min(e.slow,0.5);
+      else
+        e.slow = min(e.slow,0.75);
     }
-    */
   }
   
   public void upgrade( int amount )

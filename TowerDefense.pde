@@ -1,5 +1,9 @@
+//Bomb towers target strangely
+
 Map m;
 HUD player;
+ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+ArrayList<Boom> booms = new ArrayList<Boom>();
 ArrayList<Enemy> bads = new ArrayList<Enemy>();
 ArrayList<Tower> towers = new ArrayList<Tower>();
 ArrayList<Laser> lasers = new ArrayList<Laser>();
@@ -68,11 +72,37 @@ void draw()
   }
   drawTowerCircle();
   
-  
-  for( Laser l: lasers )
-    l.laser();
+  for( int i = 0; i < lasers.size(); i++ )
+    if( lasers.get(i).laser() )
+    {
+      lasers.remove(i);
+      i--;
+    }
+
+  //Bombs and booms
+  for( int i = 0; i < bombs.size(); i++ )
+    if( bombs.get(i).bomb() )
+    {
+      explode(bombs.get(i));
+      bombs.remove(i);
+      i--;
+    }
+  for( int i = 0; i < booms.size(); i++ )
+    if( booms.get(i).drawBoom() )
+    {
+      booms.remove(i);
+      i--;
+    }
     
   //fakeTowers[4].drawTower();
+}
+
+void explode( Bomb b )
+{
+  booms.add( new Boom( b.xPos, b.yPos, 10, b.spread, b.col ) );
+  for( Enemy e: bads )
+    if( dist( b.xPos, b.yPos, e.xPos, e.yPos ) < b.spread*.75 )
+      e.takeDamage( b.power );
 }
 
 void drawTowerCircle()
@@ -162,7 +192,7 @@ void handleBadGuys()
     }
     else if( bads.get(i).health <= 0 )
     {
-      player.cash++;
+      player.cash+=(bads.get(i).type-1)/3+1;
       bads.remove(i);
       i--;
     }
@@ -191,40 +221,54 @@ void setupTowerData()
   towerDescription[0] = "NO DESCRIPTION"; buildCost[0] = 0;
   
   //Square Tower
-  towerDescription[1] = "Medium Damage, Medium Speed,\nMedium Range"; buildCost[1] = 10;
-  towerDescription[2] = "Increase Damage";                         buildCost[2] = 10;
-  towerDescription[3] = "Increase Speed";                          buildCost[3] = 12;
-  towerDescription[4] = "Increase Range";                          buildCost[4] = 12;
-  towerDescription[5] = "Increase\nDamage";                         buildCost[5] = 14;
-  towerDescription[6] = "Double\nSpeed";                           buildCost[6] = 14;
+  towerDescription[1] = "Medium Damage, Medium Speed\nMedium Range"; buildCost[1] = 8;
+  towerDescription[2] = "Increase Damage";                            buildCost[2] = 9;
+  towerDescription[3] = "Increase Speed";                             buildCost[3] = 10;
+  towerDescription[4] = "Increase Range";                             buildCost[4] = 11;
+  towerDescription[5] = "Increase\nDamage";                           buildCost[5] = 12;
+  towerDescription[6] = "Double\nSpeed";                              buildCost[6] = 12;
   
   //Diamond Tower
-  towerDescription[7] = "Medium Damage, Slow Speed,\nHigh Range"; buildCost[7]  = 10;
+  towerDescription[7] = "Medium Damage, Slow Speed\nHigh Range"; buildCost[7]  = 10;
   towerDescription[8] = "Increase Range";                         buildCost[8]  = 12;
   towerDescription[9] = "Increase Damage";                        buildCost[9]  = 14;
   towerDescription[10] = "Increase Range";                        buildCost[10] = 12;
-  towerDescription[11] = "Double\nDamage";                       buildCost[11] = 20;
-  towerDescription[12] = "Increase\nSpeed";                       buildCost[12] = 14;
+  towerDescription[11] = "Double\nDamage";                        buildCost[11] = 15;
+  towerDescription[12] = "Split\nShot";                           buildCost[12] = 18;
   
   //Circle Tower
-  towerDescription[13] = "Low Damage, Fast Speed,\nSmall Range"; buildCost[13] = 6;
-  towerDescription[14] = "Increase Speed";                       buildCost[14] = 8;
-  towerDescription[15] = "Increase Damage";                      buildCost[15] = 10;
-  towerDescription[16] = "Increase Range";                       buildCost[16] = 12;
-  towerDescription[17] = "Increase\nDamage";                     buildCost[17] = 20;
-  towerDescription[18] = "Increase\nSpeed";                      buildCost[18] = 20;
+  towerDescription[13] = "Low Damage, Fast Speed\nSmall Range"; buildCost[13] = 6;
+  towerDescription[14] = "Increase Speed";                      buildCost[14] = 8;
+  towerDescription[15] = "Increase Damage";                     buildCost[15] = 10;
+  towerDescription[16] = "Increase Range";                      buildCost[16] = 12;
+  towerDescription[17] = "Increase\nDamage";                    buildCost[17] = 20;
+  towerDescription[18] = "Increase\nSpeed";                     buildCost[18] = 20;
   
   //Triangle Tower
-  towerDescription[19] = "Low Damage, Slow Speed,\nMulti-Shot"; buildCost[19] = 14;
-  towerDescription[20] = "Increase Speed";                      buildCost[20] = 8;
-  towerDescription[21] = "Increase Range";                      buildCost[21] = 8;
-  towerDescription[22] = "Increase Speed";                      buildCost[22] = 16;
-  towerDescription[23] = "Tripple\nDamage";                     buildCost[23] = 24;
-  towerDescription[24] = "Max 10\nTargets";                     buildCost[24] = 24;
+  towerDescription[19] = "Low Damage, Slow Speed\nMulti-Shot"; buildCost[19] = 14;
+  towerDescription[20] = "Increase Speed";                     buildCost[20] = 8;
+  towerDescription[21] = "Increase Range";                     buildCost[21] = 8;
+  towerDescription[22] = "Increase Speed";                     buildCost[22] = 16;
+  towerDescription[23] = "Tripple\nDamage";                    buildCost[23] = 20;
+  towerDescription[24] = "Increase\nRange";                    buildCost[24] = 20;
+  
+  //Hexagon Tower
+  towerDescription[25] = "Medium Damage, Low Speed\nExplosion"; buildCost[25] = 16;
+  towerDescription[26] = "Increase Range";                      buildCost[26] = 10;
+  towerDescription[27] = "Increase Damage";                     buildCost[27] = 12;
+  towerDescription[28] = "Increase Speed";                      buildCost[28] = 14;
+  towerDescription[29] = "Double\nDamage";                      buildCost[29] = 20;
+  towerDescription[30] = "Double\nRadius";                      buildCost[30] = 18;
+  
+  //Octagon Tower
+  towerDescription[31] = "Medium Range, No Damage\nSlows by 25%"; buildCost[31] = 12;
+  towerDescription[32] = "Increase Range";                        buildCost[32] = 8;
+  towerDescription[33] = "Six Targets";                           buildCost[33] = 10;
+  towerDescription[34] = "Increase Range";                        buildCost[34] = 12;
+  towerDescription[35] = "50%\nSlow";                             buildCost[35] = 18;
+  towerDescription[36] = "Ten\nTargets";                          buildCost[36] = 15;
   
   //Others
-  towerDescription[25] = "NO DATA"; buildCost[25] = 0;
-  towerDescription[31] = "NO DATA"; buildCost[31] = 0;
   towerDescription[37] = "NO DATA"; buildCost[37] = 0;
 }
 

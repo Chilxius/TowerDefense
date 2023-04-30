@@ -57,7 +57,7 @@ class HUD
     textSize(20);
     if(nextRoundTimer>0)
       text("Next: " + nextRoundTimer,width-90,height-10);
-    text("ClickMode: "+clickMode,width/2,height-10);
+    text("E:"+bads.size() + " T:"+towers.size()+" L:"+lasers.size(),width/2,height-10);
   }
   
   public void drawTowerStats( Tower t )

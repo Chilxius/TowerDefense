@@ -1,10 +1,10 @@
 class Laser
 {
-  int xPos1, yPos1, xPos2, yPos2;
+  float xPos1, yPos1, xPos2, yPos2;
   int timeLeft;
   color col;
   
-  public Laser( int x1, int y1, int x2, int y2, color c )
+  public Laser( float x1, float y1, int x2, int y2, color c )
   {
     xPos1 = x1;
     yPos1 = y1;

@@ -1,11 +1,12 @@
 class Enemy
 {
-  int xPos, yPos;
+  float xPos, yPos;
   int destX, destY;
   int direction;    // 1 - up, 2 - down, 3 - left, 4 - right
   
   int maxHealth, health;
-  int speed;
+  float speed;
+  float slow = 1;
   int type;
   
   int progress; //how far it has traveled
@@ -17,8 +18,10 @@ class Enemy
     if( type == -1 )
       xPos = yPos = 1000; //for non-target enemy
     else
+    {
       xPos = m.startX*m.size+m.size/2;
       yPos = m.startY*m.size+m.size/2;
+    }
     
     maxHealth = health = max(1,type * type / 2);    //1  4  9  16  25  36  49  64  81  100
                                                     //1  2  4  8   12  18  24  32  40  50
@@ -47,16 +50,14 @@ class Enemy
       setDestination();
     }
     
-    if( direction == 1 )
-      yPos -= speed;
-    if( direction == 2 )
-      yPos += speed;
-    if( direction == 3 )
-      xPos -= speed;
-    if( direction == 4 )
-      xPos += speed;
-      
-    progress += speed;
+    if( direction == 1 ) yPos -= speed*slow;
+    if( direction == 2 ) yPos += speed*slow;
+    if( direction == 3 ) xPos -= speed*slow;
+    if( direction == 4 ) xPos += speed*slow;
+    
+    progress += speed*slow;
+
+    slow = 1;
     
     return false;
   }
@@ -86,7 +87,7 @@ class Enemy
     xPos = destX;
     yPos = destY;
     
-    if( xPos/m.size == m.goalX && yPos/m.size == m.goalY )
+    if( int(xPos)/m.size == m.goalX && int(yPos)/m.size == m.goalY )
       return true;
     
     return false;
@@ -94,8 +95,8 @@ class Enemy
   
   public void findFirstDirection() //first spawned
   {
-    int x = xPos/m.size;
-    int y = yPos/m.size;
+    int x = round(xPos/m.size);
+    int y = round(yPos/m.size);
     if( x > 0 && m.spot[x-1][y] == 2 )
       direction = 3;
     if( x < 14 && m.spot[x+1][y] == 2 )
@@ -112,8 +113,8 @@ class Enemy
   
   public void findDirection() //normal use
   {
-    int x = xPos/m.size;
-    int y = yPos/m.size;
+    int x = round(xPos)/m.size;
+    int y = round(yPos)/m.size;
     if( x > 0 && ( m.spot[x-1][y] == 2 ||  m.spot[x-1][y] == 4 ) && direction != 4)        //has to be if-elseif chain
       direction = 3;
     else if( x < 14 && ( m.spot[x+1][y] == 2 ||  m.spot[x+1][y] == 4 ) && direction != 3)
