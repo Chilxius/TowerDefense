@@ -95,6 +95,14 @@ void draw()
     }
     
   //fakeTowers[4].drawTower();
+  if( player.lives <= 0 )
+  {
+    textSize(75);
+    fill(0);
+    textAlign(CENTER);
+    text("GAME OVER\nRound: "+wave,width/2,height/2);
+    noLoop();
+  }
 }
 
 void explode( Bomb b )
