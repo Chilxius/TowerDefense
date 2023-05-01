@@ -100,7 +100,7 @@ void draw()
     textSize(75);
     fill(0);
     textAlign(CENTER);
-    text("GAME OVER\nRound: "+wave,width/2,height/2);
+    text("GAME OVER\nRound: "+wave,width/2,height/2.5);
     noLoop();
   }
 }
