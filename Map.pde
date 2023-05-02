@@ -1,11 +1,12 @@
-
-
 class Map
 {
   int [][] spot;
   int size = min((width-100)/15,(height-100)/15);
   int startX, startY, goalX, goalY;
   String [] waves; //each line lists the delay between spawns, then the individual bad guys to spawn (by type number)
+  
+  color pauseColor1 = color(200,160,60);
+  color pauseColor2 = color(250,220,100);
   
   public Map( int level )      //1 - grass, 2 - path, 3 - start, 4 - end, 5 - tower
   {
@@ -197,6 +198,27 @@ class Map
     noTint();
   }
   
+  public void drawPauseButton()
+  {
+    push();
+    rectMode(CORNER);
+    if(paused) fill(pauseColor1);
+    else       fill(pauseColor2);
+    rect(0,0,size,size);
+    
+    if(paused) fill(pauseColor2);
+    else       fill(pauseColor1);
+    rect(3,3,size-6,size-6);
+    
+    if(paused) stroke(pauseColor1);
+    else       stroke(pauseColor2);
+    strokeWeight(5);
+    strokeCap(SQUARE);
+    line(size*3/8,size/3,size*3/8,size/3*2);
+    line(size*5/8,size/3,size*5/8,size/3*2);
+    pop();
+  }
+  
   public void drawSpotWithCircle()
   {
     int x = mouseX/m.size*m.size+m.size/2;
@@ -236,5 +258,6 @@ class Map
     {
       drawSpotWithCircle();
     }
+    drawPauseButton();
   }
 }

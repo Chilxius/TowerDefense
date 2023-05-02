@@ -10,6 +10,9 @@ ArrayList<Laser> lasers = new ArrayList<Laser>();
 Tower fakeTowers[] = new Tower[7];
 Enemy noTarget;// = new Enemy(-1);
 
+boolean paused = false;
+int pauseTimer = 0;
+
 //Image Data
 PImage grass, sand, frame, bFrame;
 
@@ -57,51 +60,54 @@ void setup()
 
 void draw()
 {
-  background(#7CF1FF);
-  m.drawMap();
-  handleBadGuys();
-  player.drawHUD();
-  
-  runRoundCounter();
-  runTowerCooldown();
-  
-  for( Tower t: towers )
+  if(!paused)
   {
-    t.drawTower();
-    t.attack();
-  }
-  drawTowerCircle();
-  
-  for( int i = 0; i < lasers.size(); i++ )
-    if( lasers.get(i).laser() )
-    {
-      lasers.remove(i);
-      i--;
-    }
-
-  //Bombs and booms
-  for( int i = 0; i < bombs.size(); i++ )
-    if( bombs.get(i).bomb() )
-    {
-      explode(bombs.get(i));
-      bombs.remove(i);
-      i--;
-    }
-  for( int i = 0; i < booms.size(); i++ )
-    if( booms.get(i).drawBoom() )
-    {
-      booms.remove(i);
-      i--;
-    }
+    background(#7CF1FF);
+    m.drawMap();
+    handleBadGuys();
+    player.drawHUD();
     
-  //fakeTowers[4].drawTower();
-  if( player.lives <= 0 )
-  {
-    textSize(75);
-    fill(0);
-    textAlign(CENTER);
-    text("GAME OVER\nRound: "+wave,width/2,height/2.5);
-    noLoop();
+    runRoundCounter();
+    runTowerCooldown();
+    
+    for( Tower t: towers )
+    {
+      t.drawTower();
+      t.attack();
+    }
+    drawTowerCircle();
+    
+    for( int i = 0; i < lasers.size(); i++ )
+      if( lasers.get(i).laser() )
+      {
+        lasers.remove(i);
+        i--;
+      }
+  
+    //Bombs and booms
+    for( int i = 0; i < bombs.size(); i++ )
+      if( bombs.get(i).bomb() )
+      {
+        explode(bombs.get(i));
+        bombs.remove(i);
+        i--;
+      }
+    for( int i = 0; i < booms.size(); i++ )
+      if( booms.get(i).drawBoom() )
+      {
+        booms.remove(i);
+        i--;
+      }
+      
+    //fakeTowers[4].drawTower();
+    if( player.lives <= 0 )
+    {
+      textSize(75);
+      fill(0);
+      textAlign(CENTER);
+      text("GAME OVER\nRound: "+(wave+1),width/2,height/2.5);
+      noLoop();
+    }
   }
 }
 
@@ -230,19 +236,19 @@ void setupTowerData()
   
   //Square Tower
   towerDescription[1] = "Medium Damage, Medium Speed\nMedium Range"; buildCost[1] = 8;
-  towerDescription[2] = "Increase Damage";                            buildCost[2] = 9;
-  towerDescription[3] = "Increase Speed";                             buildCost[3] = 10;
-  towerDescription[4] = "Increase Range";                             buildCost[4] = 11;
-  towerDescription[5] = "Increase\nDamage";                           buildCost[5] = 12;
-  towerDescription[6] = "Double\nSpeed";                              buildCost[6] = 12;
+  towerDescription[2] = "Increase Damage";                           buildCost[2] = 9;
+  towerDescription[3] = "Increase Speed";                            buildCost[3] = 10;
+  towerDescription[4] = "Increase Range";                            buildCost[4] = 11;
+  towerDescription[5] = "Increase\nDamage";                          buildCost[5] = 12;
+  towerDescription[6] = "Double\nSpeed";                             buildCost[6] = 12;
   
   //Diamond Tower
   towerDescription[7] = "Medium Damage, Slow Speed\nHigh Range"; buildCost[7]  = 10;
-  towerDescription[8] = "Increase Range";                         buildCost[8]  = 12;
-  towerDescription[9] = "Increase Damage";                        buildCost[9]  = 14;
-  towerDescription[10] = "Increase Range";                        buildCost[10] = 12;
-  towerDescription[11] = "Double\nDamage";                        buildCost[11] = 15;
-  towerDescription[12] = "Split\nShot";                           buildCost[12] = 18;
+  towerDescription[8] = "Increase Range";                        buildCost[8]  = 12;
+  towerDescription[9] = "Increase Damage";                       buildCost[9]  = 14;
+  towerDescription[10] = "Increase Range";                       buildCost[10] = 12;
+  towerDescription[11] = "Double\nDamage";                       buildCost[11] = 15;
+  towerDescription[12] = "Split\nShot";                          buildCost[12] = 18;
   
   //Circle Tower
   towerDescription[13] = "Low Damage, Fast Speed\nSmall Range"; buildCost[13] = 6;
@@ -283,6 +289,22 @@ void setupTowerData()
 void mousePressed()
 {
   println( mouseX+" "+mouseY );
+  
+  //Pause Button
+  if( mouseX < m.size && mouseY < m.size )
+  {
+    if(!paused)
+    {
+      paused = true;
+      pauseTimer = nextSecond - millis();
+      m.drawPauseButton();
+    }
+    else
+    {
+      paused = false;
+      nextSecond = millis() + pauseTimer;
+    }
+  }
   
   if( clickMode == 0 ) //nothing currently clicked
   {
