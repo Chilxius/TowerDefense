@@ -15,6 +15,7 @@ int pauseTimer = 0;
 
 //Image Data
 PImage grass, sand, frame, bFrame;
+PImage imp, squid, slime;
 
 //Round Data
 int nextRoundTimer = 5;
@@ -47,6 +48,10 @@ void setup()
   sand  = loadImage("sand.png");  sand.resize(m.size,0);
   frame = loadImage("frame.png"); frame.resize(m.size*15+32,m.size*15+33);
   bFrame = loadImage("buttonFrame.png"); bFrame.resize(player.buttonSize,0);
+  
+  imp = loadImage("imp.png");     imp.resize(m.size,0);
+  squid = loadImage("squid.png"); squid.resize(m.size,0);
+  slime = loadImage("slime.png"); slime.resize(m.size,0);
   
   towerToPlace = new Tower(-1,-1,0);
   noTarget = new Enemy(-1);
@@ -224,7 +229,7 @@ boolean mouseInSquare( int x, int y )
 int buttonClicked()
 {
   if( mouseX > width-85 && mouseX < width-15 ) // within button X range
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < 6; i++)
       if( mouseY > 15+i*100 && mouseY < 85+i*100 ) // 1      7      13      19      25      31      37      43
         return (1 + i*6);
   return -1;

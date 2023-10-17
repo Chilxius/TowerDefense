@@ -150,21 +150,39 @@ class Enemy
     float transAmount = 255*((float)health/maxHealth);      // : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z
     switch( type )
     {
-      case 1: fill(030,030,250,transAmount); stroke(030,030,250); break;
-      case 2: fill(030,250,250,transAmount); stroke(030,250,250); break;
-      case 3: fill(030,250,030,transAmount); stroke(030,250,030); break;
-      case 4: fill(100,030,200,transAmount); stroke(100,030,200); break;
-      case 5: fill(100,200,200,transAmount); stroke(100,200,200); break;
-      case 6: fill(100,200,030,transAmount); stroke(100,200,030); break;
-      case 7: fill(200,030,150,transAmount); stroke(200,030,150); break;
-      case 8: fill(200,150,150,transAmount); stroke(200,150,150); break;
-      case 9: fill(200,150,030,transAmount); stroke(200,150,030); break;
-      case 10:fill(255,transAmount); stroke(255); break;
+      //case 1: fill(030,030,250,transAmount); stroke(030,030,250); break;
+      //case 2: fill(030,250,250,transAmount); stroke(030,250,250); break;
+      //case 3: fill(030,250,030,transAmount); stroke(030,250,030); break;
+      //case 4: fill(100,030,200,transAmount); stroke(100,030,200); break;
+      //case 5: fill(100,200,200,transAmount); stroke(100,200,200); break;
+      //case 6: fill(100,200,030,transAmount); stroke(100,200,030); break;
+      //case 7: fill(200,030,150,transAmount); stroke(200,030,150); break;
+      //case 8: fill(200,150,150,transAmount); stroke(200,150,150); break;
+      //case 9: fill(200,150,030,transAmount); stroke(200,150,030); break;
+      //case 10:fill(255,transAmount); stroke(255); break;
       
-      default: fill(0); break;
+      case 1: tint(030,030,250,transAmount); break;
+      case 2: tint(030,250,250,transAmount); break;
+      case 3: tint(030,250,030,transAmount); break;
+      case 4: tint(100,030,200,transAmount); break;
+      case 5: tint(100,200,200,transAmount); break;
+      case 6: tint(100,200,030,transAmount); break;
+      case 7: tint(200,030,150,transAmount); break;
+      case 8: tint(200,150,150,transAmount); break;
+      case 9: tint(200,150,030,transAmount); break;
+      case 10:tint(255,transAmount);         break;
+      
+      default: tint(0); break;
     }
-    strokeWeight(1);
-    circle( xPos, yPos, m.size );
+    //strokeWeight(1);
+    //circle( xPos, yPos, m.size );
+    imageMode(CENTER);
+    if( type % 3 == 1 )
+      image( slime, xPos, yPos );
+    else if( type % 3 == 2 )
+      image( squid, xPos, yPos );
+    else
+      image( imp, xPos, yPos );
     pop();
   }
   

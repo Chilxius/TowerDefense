@@ -58,7 +58,7 @@ class HUD
     if(nextRoundTimer>0)
       text("Next: " + nextRoundTimer,width-90,height-10);
     else
-      text("Round: " + (wave+1), width-90,height-10);
+      text("Round: " + (wave+1), width-105,height-10);
     //text("E:"+bads.size() + " T:"+towers.size()+" L:"+lasers.size(),width/2,height-10);
   }
   
